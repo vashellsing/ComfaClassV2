@@ -6,13 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
     iniciarSesion:       { view: "paginas/iniciarSesion.php",       script: "autenticacion/iniciarSesion.js" },
     registro:            { view: "paginas/registro.php",            script: "autenticacion/registro.js" },
     administradorVista:  { view: "paginas/administradorVista.php",  script: "administrador/administradorVista.js" },
-    estudianteVista:     { view: "paginas/estudianteVista.php",     script: "estudianteVista.js" },
     invitadoVista:       { view: "paginas/invitadoVista.php",       script: null },
     profesorVista:       { view: "paginas/profesorVista.php",       script: null },
     profesorCrearCursos: { view: "paginas/profesorCrearCursos.php", script: "profesor/profesorCrearCursos.js" },
     profesorVerCursos:   { view: "paginas/profesorVerCursos.php",   script: "profesor/profesorVerCursos.js" },
-    cursosDisponibles:   { view: "paginas/cursosDisponibles.php",   script: null },
-    cursosInscritos:     { view: "paginas/cursosInscritos.php",     script: null },
+    estudianteVista:     { view: "paginas/estudianteVista.php",     script: "estudiante/estudianteVista.js" },
+    cursosDisponibles:   { view: "paginas/cursosDisponibles.php",   script: "estudiante/cursosDisponibles.js" },
+    cursosInscritos:     { view: "paginas/cursosInscritos.php",     script: "estudiante/cursosInscritos.js" },
 
   };
 
