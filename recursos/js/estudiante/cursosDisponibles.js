@@ -1,108 +1,94 @@
-// Variables globales para almacenar los cursos
-let cursosDisponibles = [];
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Cargar cursos disponibles al cargar la página
-    cargarCursosDisponibles();
-    
-    // Configurar el mensaje de éxito para que se pueda cerrar
-    const btnCerrarMensaje = document.querySelector('#mensajeExito .btn-close');
-    if (btnCerrarMensaje) {
-        btnCerrarMensaje.addEventListener('click', function() {
-            document.getElementById('mensajeExito').classList.remove('show');
-        });
+(() => {
+    // 1) Espera a que exista el contenedor en el DOM
+    function waitForContainer() {
+      const cont = document.getElementById("lista-disponibles");
+      if (!cont) {
+        return setTimeout(waitForContainer, 100);
+      }
+      init(cont);
     }
-});
-
-// Función para cargar los cursos disponibles
-function cargarCursosDisponibles() {
-    fetch('includes/estudiante/obtenerCursosDisponibles.php')
-        .then(response => response.json())
-        .then(data => {
-            const tablaCursos = document.getElementById('tablaCursosDisponibles');
-            
-            if (data.error) {
-                tablaCursos.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${data.error}</td></tr>`;
-                return;
-            }
-            
-            // Guardar los cursos en la variable global
-            cursosDisponibles = data.cursos || [];
-            
-            actualizarTablaCursosDisponibles();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            const tablaCursos = document.getElementById('tablaCursosDisponibles');
-            tablaCursos.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error al cargar los cursos. Por favor, intenta de nuevo más tarde.</td></tr>';
+  
+    // 2) Inicializa la carga de cursos
+    async function init(cont) {
+      try {
+        const res  = await fetch("includes/estudiante/obtenerCursosDisponibles.php", {
+          headers: { "X-Requested-With": "XMLHttpRequest" }
         });
-}
-
-// Función para actualizar la tabla de cursos disponibles
-function actualizarTablaCursosDisponibles() {
-    const tablaCursos = document.getElementById('tablaCursosDisponibles');
-    
-    if (cursosDisponibles.length > 0) {
-        let html = '';
-        cursosDisponibles.forEach(curso => {
-            html += `
-            <tr>
-                <td>${curso.nombre_curso}</td>
-                <td>${curso.nombre_profesor}</td>
-                <td>${curso.descripcion_curso}</td>
-                <td>${curso.nombre_materia}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" onclick="inscribirCurso(${curso.id_curso})">
-                        <i class="bi bi-plus-circle me-1"></i>Agregar
+        const { success, data } = await res.json();
+        if (!success) throw new Error("No autorizado");
+  
+        cont.innerHTML = data.length
+          ? data.map(c => `
+              <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">${c.nombre_curso}</h5>
+                    <p class="text-muted mb-2">${c.nombre_materia}</p>
+                    <p class="flex-grow-1">${c.descripcion_curso || '<em>Sin descripción</em>'}</p>
+                    <button class="btn btn-primary mt-3" data-id="${c.id_curso}">
+                      Inscribirse
                     </button>
-                </td>
-            </tr>
-            `;
-        });
-        tablaCursos.innerHTML = html;
-    } else {
-        tablaCursos.innerHTML = '<tr><td colspan="5" class="text-center">No hay cursos disponibles en este momento.</td></tr>';
+                  </div>
+                </div>
+              </div>
+            `).join("")
+          : `<p class="text-center">No hay cursos nuevos disponibles.</p>`;
+  
+        // 3) Agrega listener de inscripción
+        cont.querySelectorAll("button[data-id]")
+          .forEach(btn => btn.addEventListener("click", inscribir));
+      } catch (e) {
+        cont.innerHTML = `<div class="alert alert-danger">Error al cargar cursos disponibles.</div>`;
+        console.error(e);
+      }
     }
-}
-
-// Función para inscribir al estudiante en un curso
-function inscribirCurso(idCurso) {
-    const formData = new FormData();
-    formData.append('id_curso', idCurso);
-    
-    fetch('includes/estudiante/inscribirCurso.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-            return;
-        }
-        
-        // Mostrar mensaje de éxito
-        const mensajeExito = document.getElementById('mensajeExito');
-        mensajeExito.classList.add('show');
-        
-        // Eliminar el curso de la lista de disponibles
-        cursosDisponibles = cursosDisponibles.filter(curso => curso.id_curso != idCurso);
-        
-        // Actualizar la tabla
-        actualizarTablaCursosDisponibles();
-        
-        // Ocultar el mensaje después de 3 segundos
-        setTimeout(() => {
-            mensajeExito.classList.remove('show');
-        }, 3000);
-        
-        // Recargar la página de cursos inscritos si está abierta en otra pestaña
-        if (window.opener && !window.opener.closed && window.opener.cargarCursosInscritos) {
-            window.opener.cargarCursosInscritos();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al inscribir en el curso. Por favor, intenta de nuevo más tarde.');
-    });
-}
+  
+    // 4) Función para inscribir al curso
+    async function inscribir(e) {
+      const idCurso = e.currentTarget.dataset.id;
+      try {
+        const res  = await fetch("includes/estudiante/inscribirCurso.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          body: new URLSearchParams({ id_curso: idCurso })
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+  
+        // Modal de éxito al estilo Bootstrap
+        const modalHtml = `
+          <div class="modal fade" id="modal-exito" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                  <h5 class="modal-title">¡Inscripción exitosa!</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  Te has inscrito correctamente.
+                </div>
+              </div>
+            </div>
+          </div>`;
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+        const bsModal = new bootstrap.Modal(document.getElementById("modal-exito"));
+        bsModal.show();
+        bsModal._element.addEventListener("hidden.bs.modal", () => {
+          bsModal.dispose();
+          document.getElementById("modal-exito").remove();
+          // Recarga la lista para que el curso desaparezca
+          init(document.getElementById("lista-disponibles"));
+        });
+      } catch (err) {
+        console.error(err);
+        alert("No se pudo completar la inscripción: " + err.message);
+      }
+    }
+  
+    // Arranca el bucle de espera
+    waitForContainer();
+  })();
+  

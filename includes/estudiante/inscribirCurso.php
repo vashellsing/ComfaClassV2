@@ -1,62 +1,47 @@
 <?php
-require_once __DIR__ . "/../conexion.php";
 session_start();
+require_once __DIR__ . "/../conexion.php";
+header('Content-Type: application/json');
 
-// Verificar si el usuario está autenticado y es estudiante
-if (!isset($_SESSION['id_usuario']) || $_SESSION['id_rol'] != 3) {
-    echo json_encode(['error' => 'No autorizado']);
-    exit;
+if ($_SERVER['REQUEST_METHOD']!=='POST' ||
+    !isset($_SESSION['id_rol']) || $_SESSION['id_rol']!=3) {
+  http_response_code(403);
+  echo json_encode(['success'=>false,'message'=>'No autorizado']);
+  exit;
 }
 
-// Verificar si se recibió el ID del curso
-if (!isset($_POST['id_curso'])) {
-    echo json_encode(['error' => 'ID de curso no proporcionado']);
-    exit;
+$idEst = $_SESSION['id_usuario'];
+$idCurso = intval($_POST['id_curso'] ?? 0);
+if (!$idCurso) {
+  echo json_encode(['success'=>false,'message'=>'ID de curso inválido']);
+  exit;
 }
 
-$id_estudiante = $_SESSION['id_usuario'];
-$id_curso = $_POST['id_curso'];
-
-try {
-    $conn = Conexion::conectar();
-    
-    // Verificar si ya está inscrito
-    $queryVerificar = "SELECT COUNT(*) FROM inscripciones 
-                      WHERE id_usuario = :id_estudiante AND id_curso = :id_curso";
-    $stmtVerificar = $conn->prepare($queryVerificar);
-    $stmtVerificar->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
-    $stmtVerificar->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
-    $stmtVerificar->execute();
-    
-    if ($stmtVerificar->fetchColumn() > 0) {
-        echo json_encode(['error' => 'Ya estás inscrito en este curso']);
-        exit;
-    }
-    
-    // Inscribir al estudiante
-    $queryInscribir = "INSERT INTO inscripciones (id_curso, id_usuario) 
-                      VALUES (:id_curso, :id_estudiante)";
-    $stmtInscribir = $conn->prepare($queryInscribir);
-    $stmtInscribir->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
-    $stmtInscribir->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
-    $stmtInscribir->execute();
-    
-    // Obtener los datos del curso recién inscrito para devolverlos
-    $queryCurso = "SELECT c.id_curso, c.nombre_curso, c.descripcion_curso, 
-                  CONCAT(u.nombre_usuario, ' ', u.apellido_usuario) AS nombre_profesor,
-                  m.nombre_materia, NOW() as fecha_inscripcion
-                  FROM cursos c
-                  INNER JOIN usuarios u ON c.id_usuario = u.id_usuario
-                  INNER JOIN materias m ON c.id_materia = m.id_materia
-                  WHERE c.id_curso = :id_curso";
-    $stmtCurso = $conn->prepare($queryCurso);
-    $stmtCurso->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
-    $stmtCurso->execute();
-    $curso = $stmtCurso->fetch(PDO::FETCH_ASSOC);
-    
-    echo json_encode(['success' => true, 'message' => 'Inscripción exitosa', 'curso' => $curso]);
-    
-} catch (PDOException $e) {
-    echo json_encode(['error' => 'Error al inscribir: ' . $e->getMessage()]);
+// Evitar doble inscripción
+$stmt = $conn->prepare(
+  "SELECT 1 FROM inscripciones WHERE id_usuario=? AND id_curso=?"
+);
+$stmt->bind_param("ii",$idEst,$idCurso);
+$stmt->execute();
+$stmt->store_result();
+if($stmt->num_rows>0){
+  echo json_encode(['success'=>false,'message'=>'Ya inscrito']);
+  exit;
 }
-?>
+$stmt->close();
+
+// Inserción
+$stmt = $conn->prepare(
+  "INSERT INTO inscripciones (id_usuario,id_curso,fecha_inscripcion)
+   VALUES (?,?,NOW())"
+);
+$stmt->bind_param("ii",$idEst,$idCurso);
+$ok = $stmt->execute();
+echo json_encode([
+  'success'=>(bool)$ok,
+  'message'=>$ok
+    ? 'Inscripción exitosa'
+    : 'Error al inscribir: '.$stmt->error
+]);
+$stmt->close();
+$conn->close();

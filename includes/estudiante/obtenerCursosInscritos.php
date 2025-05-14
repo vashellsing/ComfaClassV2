@@ -1,37 +1,31 @@
 <?php
-require_once __DIR__ . "/../conexion.php";
 session_start();
+require_once __DIR__ . "/../conexion.php";
+header('Content-Type: application/json');
 
-// Verificar si el usuario está autenticado y es estudiante
-if (!isset($_SESSION['id_usuario']) || $_SESSION['id_rol'] != 3) {
-    echo json_encode(['error' => 'No autorizado']);
-    exit;
+if (!isset($_SESSION['id_rol']) || $_SESSION['id_rol'] != 3) {
+  http_response_code(403);
+  echo json_encode(['success'=>false,'message'=>'No autorizado']);
+  exit;
 }
 
-$id_estudiante = $_SESSION['id_usuario'];
+$idEst = $_SESSION['id_usuario'];
+$sql = "
+  SELECT c.id_curso, c.nombre_curso, c.descripcion_curso, m.nombre_materia, 
+         DATE_FORMAT(i.fecha_inscripcion, '%Y-%m-%d') AS fecha_inscripcion
+  FROM inscripciones i
+  JOIN cursos c      ON i.id_curso = c.id_curso
+  JOIN materias m    ON c.id_materia = m.id_materia
+  WHERE i.id_usuario = ?
+  ORDER BY i.fecha_inscripcion DESC
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i",$idEst);
+$stmt->execute();
+$res = $stmt->get_result();
+$c = [];
+while($f = $res->fetch_assoc()) $c[] = $f;
 
-try {
-    $conn = Conexion::conectar();
-    
-    // Consulta para obtener cursos inscritos por el estudiante
-    $query = "SELECT c.id_curso, c.nombre_curso, c.descripcion_curso, 
-              CONCAT(u.nombre_usuario, ' ', u.apellido_usuario) AS nombre_profesor,
-              m.nombre_materia, i.fecha_inscripcion
-              FROM inscripciones i
-              INNER JOIN cursos c ON i.id_curso = c.id_curso
-              INNER JOIN usuarios u ON c.id_usuario = u.id_usuario
-              INNER JOIN materias m ON c.id_materia = m.id_materia
-              WHERE i.id_usuario = :id_estudiante";
-    
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':id_estudiante', $id_estudiante, PDO::PARAM_INT);
-    $stmt->execute();
-    
-    $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo json_encode(['cursos' => $cursos]);
-    
-} catch (PDOException $e) {
-    echo json_encode(['error' => 'Error al obtener los cursos: ' . $e->getMessage()]);
-}
-?>
+echo json_encode(['success'=>true,'data'=>$c]);
+$stmt->close();
+$conn->close();
