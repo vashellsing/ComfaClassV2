@@ -10,7 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     invitadoVista:       { view: "paginas/invitadoVista.php",       script: null },
     profesorVista:       { view: "paginas/profesorVista.php",       script: null },
     profesorCrearCursos: { view: "paginas/profesorCrearCursos.php", script: "profesor/profesorCrearCursos.js" },
-    profesorVerCursos:   { view: "paginas/profesorVerCursos.php",   script: "profesor/profesorVerCursos.js" }
+    profesorVerCursos:   { view: "paginas/profesorVerCursos.php",   script: "profesor/profesorVerCursos.js" },
+    cursosDisponibles:   { view: "paginas/cursosDisponibles.php",   script: null },
+    cursosInscritos:     { view: "paginas/cursosInscritos.php",     script: null },
+
   };
 
   // ─── 2. RUTAS PÚBLICAS ────────────────────────────────────────────────────────
