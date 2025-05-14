@@ -1,6 +1,11 @@
 <?php require_once __DIR__ . "/../includes/checkSAP.php"; ?>
 <div class="container mt-4">
-  <h3>Mis Cursos Inscritos</h3>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Mis Cursos Inscritos</h3>
+    <button class="btn btn-sm btn-outline-secondary" onclick="navegarA('estudianteVista')">
+      <i class="bi bi-arrow-left me-1"></i>Volver
+    </button>
+  </div>
   <div id="lista-inscritos" class="row g-4">
     <!-- Aquí inyecta el JS -->
   </div>
@@ -34,6 +39,7 @@
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+        
       </div>
     </div>
   </div>
