@@ -1,19 +1,26 @@
 (() => {
+
+  let modalElem, modalInstance, modalMensaje;
   // Espera a que exista el formulario y luego arranca
   function waitForForm() {
     const form = document.getElementById("registroForm");
-    if (!form) return setTimeout(waitForForm, 100);
+    modalElem = document.getElementById("modalRegistro");
+    if (!form || !modalElem) {
+      return setTimeout(waitForForm, 100);
+    }
+    // Inicializa instancia de Bootstrap Modal
+    modalInstance = new bootstrap.Modal(modalElem);
+    modalMensaje = document.getElementById("modalRegistroMensaje");
     initRegistro();
   }
 
   // Inicialización: validaciones, toggles y carga de géneros
-  function initRegistro() {
+  async function initRegistro() {
     cargarGeneros();
     togglePassword("contrasena", "mostrarContrasena");
     togglePassword("confirmar_contrasena", "mostrarConfirmarContrasena");
 
-    document
-      .getElementById("registroForm")
+    document.getElementById("registroForm")
       .addEventListener("submit", async e => {
         e.preventDefault();
         if (!validarFormularioRegistro()) return;
@@ -53,16 +60,20 @@
       });
       const json = await res.json();
 
+      // Muestro modal con el mensaje
+      modalMensaje.textContent = json.message;
+      modalInstance.show();
+
       if (json.success) {
-        alert(json.message);
-        // Navegar dentro de la SPA, sin recargar
-        window.navegarA(json.redirect);
-      } else {
-        alert("Error: " + json.message);
+        // Al cerrar modal, navegamos al login
+        modalElem.addEventListener("hidden.bs.modal", () => {
+          window.navegarA(json.redirect);
+        }, { once: true });
       }
     } catch (err) {
       console.error("Error en solicitud de registro:", err);
-      alert("Hubo un problema de conexión.");
+      modalMensaje.textContent = "Hubo un problema de conexión.";
+      modalInstance.show();
     }
   }
 
@@ -129,7 +140,7 @@
   function validarContrasena(input) {
     const val = input.value;
     const checks = [
-      { test: /.{8,20}/,       label: "8–20 caracteres" },
+      { test: /^.{8,20}$/,     label: "8–20 caracteres" },
       { test: /[A-Z]/,         label: "1 mayúscula" },
       { test: /[a-z]/,         label: "1 minúscula" },
       { test: /\d/,            label: "1 número" },

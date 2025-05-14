@@ -13,23 +13,12 @@ require_once __DIR__ . "/../includes/checkSAP.php";
             <!-- Correo -->
             <div class="mb-3">
               <label for="email" class="form-label">Correo Electrónico</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="usuario@email.com"
-                required
-              />
+              <input type="email" class="form-control" id="email" placeholder="usuario@email.com" required />
             </div>
             <!-- Contraseña -->
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                required
-              />
+              <input type="password" class="form-control" id="password" required />
             </div>
             <!-- Mensaje de error -->
             <div class="mb-3 text-center">
@@ -43,8 +32,13 @@ require_once __DIR__ . "/../includes/checkSAP.php";
             <a href="#" onclick="navegarA('recuperarContrasena')">¿Olvidaste tu contraseña?</a>
           </div>
           <div class="text-center mt-2">
-            <p>¿No tienes una cuenta? 
-              <a href="#" onclick="navegarA('registro')">Regístrate aquí</a>
+
+            <p>¿No tienes cuenta?
+              <a href="#" onclick="event.preventDefault(); navegarA('registro');">
+                Regístrate aquí
+              </a>
+            </p>
+
             </p>
           </div>
         </div>
