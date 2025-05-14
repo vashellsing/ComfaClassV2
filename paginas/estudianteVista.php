@@ -4,25 +4,46 @@ require_once __DIR__ . "/../includes/checkSAP.php";
 <main class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <!-- Título y descripción agregados -->
-      <div class="mb-3 text-center">
-        <h2>Vista del Estudiante</h2>
-        <p>Aquí puedes explorar todos los cursos disponibles y acceder al contenido que más te interese.</p>
+      <!-- Título y descripción mejorados -->
+      <div class="mb-4 text-center">
+        <h2 class="fw-bold">Vista del Estudiante</h2>
+        <p class="text-muted">Aquí puedes explorar todos los cursos disponibles y acceder al contenido que más te interese.</p>
       </div>
 
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h4 class="mb-0 text-center">Cursos Disponibles</h4>
+      <div class="row g-4">
+        <!-- Card de Cursos Disponibles -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white py-3">
+              <h5 class="mb-0 text-center">Cursos Disponibles</h5>
+            </div>
+            <div class="card-body d-flex flex-column align-items-center justify-content-between">
+              <p class="text-center mb-4">Explora todos los cursos que puedes tomar</p>
+              <button class="btn btn-outline-primary btn-sm px-4" onclick="navegarA('cursosDisponibles')">
+                <i class="bi bi-book me-2"></i>Ver cursos
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <!-- Contenedor donde se inyectarán los cursos -->
-          <div class="text-center mt-2">
-            <p>
-              <a href="#" onclick="navegarA('estudianteVista')">Mostrar Cursos</a>
-            </p>
-          </div>          
+        
+        <!-- Card de Cursos Inscritos -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-success text-white py-3">
+              <h5 class="mb-0 text-center">Cursos Inscritos</h5>
+            </div>
+            <div class="card-body d-flex flex-column align-items-center justify-content-between">
+              <p class="text-center mb-4">Accede a los cursos en los que ya estás inscrito</p>
+              <button class="btn btn-outline-success btn-sm px-4" onclick="navegarA('cursosInscritos')">
+                <i class="bi bi-journal-check me-2"></i>Ver mis cursos
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </main>
+
+<!-- Asegúrate de incluir Bootstrap Icons si no lo has hecho ya -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> -->
