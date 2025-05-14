@@ -1,118 +1,97 @@
-// Variables globales para almacenar los cursos
-let cursosInscritos = [];
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Cargar cursos inscritos al cargar la página
-    cargarCursosInscritos();
-    
-    // Configurar el botón de confirmación de eliminación
-    document.getElementById('btnConfirmarEliminar').addEventListener('click', function() {
-        const idCurso = this.getAttribute('data-id-curso');
-        if (idCurso) {
-            eliminarInscripcion(idCurso);
-        }
-    });
-});
-
-// Función para cargar los cursos inscritos
-function cargarCursosInscritos() {
-    fetch('includes/estudiante/obtenerCursosInscritos.php')
-        .then(response => response.json())
-        .then(data => {
-            const tablaCursos = document.getElementById('tablaCursosInscritos');
-            
-            if (data.error) {
-                tablaCursos.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${data.error}</td></tr>`;
-                return;
-            }
-            
-            // Guardar los cursos en la variable global
-            cursosInscritos = data.cursos || [];
-            
-            actualizarTablaCursosInscritos();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            const tablaCursos = document.getElementById('tablaCursosInscritos');
-            tablaCursos.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error al cargar los cursos. Por favor, intenta de nuevo más tarde.</td></tr>';
-        });
-}
-
-// Función para actualizar la tabla de cursos inscritos
-function actualizarTablaCursosInscritos() {
-    const tablaCursos = document.getElementById('tablaCursosInscritos');
-    
-    if (cursosInscritos.length > 0) {
-        let html = '';
-        cursosInscritos.forEach(curso => {
-            // Formatear la fecha
-            const fecha = new Date(curso.fecha_inscripcion);
-            const fechaFormateada = fecha.toLocaleDateString();
-            
-            html += `
-            <tr>
-                <td>${curso.nombre_curso}</td>
-                <td>${curso.nombre_profesor}</td>
-                <td>${curso.descripcion_curso}</td>
-                <td>${fechaFormateada}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="confirmarEliminar(${curso.id_curso})">
-                        <i class="bi bi-trash me-1"></i>Eliminar
-                    </button>
-                </td>
-            </tr>
-            `;
-        });
-        tablaCursos.innerHTML = html;
-    } else {
-        tablaCursos.innerHTML = '<tr><td colspan="5" class="text-center">No estás inscrito en ningún curso todavía.</td></tr>';
+(() => {
+    let modalConfirm, modalMsg;
+    let cursoAAnular = null;
+  
+    function waitForContainer() {
+      const cont = document.getElementById("lista-inscritos");
+      if (!cont) return setTimeout(waitForContainer, 100);
+      // Inicializa ambos modales
+      modalConfirm = new bootstrap.Modal(document.getElementById("modal-confirmar-anulacion"));
+      modalMsg     = new bootstrap.Modal(document.getElementById("modal-mensaje"));
+      init(cont);
     }
-}
-
-// Función para mostrar el modal de confirmación
-function confirmarEliminar(idCurso) {
-    const btnConfirmar = document.getElementById('btnConfirmarEliminar');
-    btnConfirmar.setAttribute('data-id-curso', idCurso);
-    
-    // Mostrar el modal
-    const modal = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-    modal.show();
-}
-
-// Función para eliminar la inscripción
-function eliminarInscripcion(idCurso) {
-    const formData = new FormData();
-    formData.append('id_curso', idCurso);
-    
-    fetch('includes/estudiante/eliminarInscripcion.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Cerrar el modal
-        const modalElement = document.getElementById('modalConfirmacion');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        modal.hide();
-        
-        if (data.error) {
-            alert(data.error);
-            return;
+  
+    function init(container) {
+      cargarInscritos(container);
+      document
+        .getElementById("btn-confirmar-anulacion")
+        .addEventListener("click", confirmarAnulacion);
+    }
+  
+    async function cargarInscritos(container) {
+      try {
+        const res  = await fetch("includes/estudiante/obtenerCursosInscritos.php");
+        const { success, data } = await res.json();
+        if (!success) throw new Error("No autorizado");
+        container.innerHTML = data.length
+          ? data.map(c => tarjetaHTML(c)).join("")
+          : `<div class="col-12"><p class="text-center">No estás inscrito en ningún curso.</p></div>`;
+        // Enlaza evento al botón Anular de cada tarjeta
+        container.querySelectorAll(".btn-anular")
+          .forEach(btn => btn.addEventListener("click", abrirModalConfirm));
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="alert alert-danger">Error al cargar cursos.</div>`;
+      }
+    }
+  
+    function tarjetaHTML(c) {
+      return `
+        <div class="col-md-6" data-curso-id="${c.id_curso}">
+          <div class="card shadow-sm h-100 d-flex flex-column">
+            <div class="card-body flex-grow-1">
+              <h5 class="card-title">${c.nombre_curso}</h5>
+              <p class="text-muted mb-2">${c.nombre_materia}</p>
+              <p>${c.descripcion_curso || '<em>Sin descripción</em>'}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <small class="text-muted">Inscrito el ${c.fecha_inscripcion}</small>
+              <button class="btn btn-outline-danger btn-sm btn-anular">Anular</button>
+            </div>
+          </div>
+        </div>`;
+    }
+  
+    function abrirModalConfirm(e) {
+      const card = e.currentTarget.closest("[data-curso-id]");
+      cursoAAnular = card.dataset.cursoId;
+      document.getElementById("modal-confirmar-anulacion-body").textContent =
+        "¿Seguro que deseas anular la inscripción a este curso?";
+      modalConfirm.show();
+    }
+  
+    async function confirmarAnulacion() {
+      modalConfirm.hide();
+      try {
+        const params = new URLSearchParams({ id_curso: cursoAAnular });
+        const res    = await fetch("includes/estudiante/eliminarInscripcion.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: params.toString()
+        });
+        const json   = await res.json();
+        if (!json.success) throw new Error(json.message);
+        // Quita la tarjeta del DOM
+        const card = document.querySelector(`[data-curso-id="${cursoAAnular}"]`);
+        card?.remove();
+        // Si no quedan más, mensaje de “ninguno”
+        if (!document.querySelector("[data-curso-id]")) {
+          document.getElementById("lista-inscritos").innerHTML =
+            `<div class="col-12"><p class="text-center">No estás inscrito en ningún curso.</p></div>`;
         }
-        
-        // Eliminar el curso de la lista de inscritos
-        cursosInscritos = cursosInscritos.filter(curso => curso.id_curso != idCurso);
-        
-        // Actualizar la tabla
-        actualizarTablaCursosInscritos();
-        
-        // Recargar la página de cursos disponibles si está abierta en otra pestaña
-        if (window.opener && !window.opener.closed && window.opener.cargarCursosDisponibles) {
-            window.opener.cargarCursosDisponibles();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al eliminar la inscripción. Por favor, intenta de nuevo más tarde.');
-    });
-}
+        showMessage(json.message);
+      } catch (err) {
+        console.error(err);
+        showMessage(err.message || "Error al anular.");
+      }
+    }
+  
+    function showMessage(msg) {
+      document.getElementById("modal-mensaje-body").textContent = msg;
+      modalMsg.show();
+    }
+  
+    // Arranca
+    waitForContainer();
+  })();
+  
