@@ -4,15 +4,16 @@ require_once __DIR__ . "/../includes/checkSAP.php";
 
 <div class="container mt-4">
   <h2 class="mb-4">Administrar usuarios</h2>
-  <table class="table table-striped">
+  <table class="table table-striper table-hover ">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Identificación</th>
-        <th>Correo</th>
+        <th class="text-center ">Nombre</th>
+        <th class="text-center">Apellido</th>
+        <th class="text-center">Identificación</th>
+        <th class="text-center">Correo</th>
         <th class="text-center">Rol actual</th>
-        <th>Nuevo rol</th>
-        <th class="text-center">Acción</th>
+        <th class="text-center">Nuevo rol</th>
+        <th class="text-center"></th>
       </tr>
     </thead>
     <tbody id="cuerpo-tabla-usuarios">
