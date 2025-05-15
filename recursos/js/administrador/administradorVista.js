@@ -38,6 +38,7 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${u.nombre}</td>
+        <td>${u.apellido}</td>
         <td>${u.identificacion}</td>
         <td>${u.correo}</td>
         <td class="text-center">${u.rol_actual}</td>

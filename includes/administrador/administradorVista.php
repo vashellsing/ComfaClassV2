@@ -20,6 +20,7 @@ $sql = "
   SELECT 
     u.id_usuario         AS id,
     u.nombre_usuario     AS nombre,
+    u.apellido_usuario   AS apellido,
     u.identificacion_usuario AS identificacion,
     u.correo_usuario     AS correo,
     r.nombre_rol         AS rol_actual
