@@ -34,6 +34,7 @@
         }
         window.navegarA(data.redirect);
       }
+     
       if (data.success) {
         // 1) Obtenemos el modal de la página
         const modalEl = document.getElementById('loginSuccessModal');

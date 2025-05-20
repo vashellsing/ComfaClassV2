@@ -47,15 +47,23 @@ require_once __DIR__ . "/../includes/checkSAP.php";
   </div>
 </main>
 <!-- Modal de Éxito de Login -->
-<div class="modal fade" id="loginSuccessModal" tabindex="-1" aria-labelledby="loginSuccessLabel" aria-hidden="true">
+<div class="modal fade" id="loginSuccessModal" tabindex="-1" aria-labelledby="loginSuccessLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow-sm">
-      <div class="modal-header">
-        <h5 class="modal-title" id="loginSuccessLabel">¡Éxito!</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-success text-white border-0">
+        <h5 class="modal-title" id="loginSuccessLabel">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill me-2" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+          </svg>
+          ¡Éxito!
+        </h5>
       </div>
-      <div class="modal-body text-center">
-        Has iniciado sesión correctamente.
+      <div class="modal-body text-center py-4">
+        <p class="lead mb-3">Has iniciado sesión correctamente.</p>
+        <p>¡Bienvenido/a de nuevo! Ya puedes continuar navegando.</p>
+      </div>
+      <div class="modal-footer justify-content-center border-0">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Continuar</button>
       </div>
     </div>
   </div>
