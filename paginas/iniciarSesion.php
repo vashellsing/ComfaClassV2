@@ -46,3 +46,17 @@ require_once __DIR__ . "/../includes/checkSAP.php";
     </div>
   </div>
 </main>
+<!-- Modal de Éxito de Login -->
+<div class="modal fade" id="loginSuccessModal" tabindex="-1" aria-labelledby="loginSuccessLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-sm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginSuccessLabel">¡Éxito!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        Has iniciado sesión correctamente.
+      </div>
+    </div>
+  </div>
+</div>
