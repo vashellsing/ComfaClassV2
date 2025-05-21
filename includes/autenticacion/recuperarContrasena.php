@@ -1,5 +1,5 @@
 <?php
-include('conexion.php');
+include_once __DIR__ . "/../conexion.php";
 header("Content-Type: application/json");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     inicio:              { view: "paginas/inicio.php",              script: null },
     iniciarSesion:       { view: "paginas/iniciarSesion.php",       script: "autenticacion/iniciarSesion.js" },
     registro:            { view: "paginas/registro.php",            script: "autenticacion/registro.js" },
-    recuperarContrasena: { view: "paginas/recuperarContrasena.php", script: null },
+    recuperarContrasena: { view: "paginas/recuperarContrasena.php", script: "autenticacion/recuperarContrasena.js" },
     administradorVista:  { view: "paginas/administradorVista.php",  script: "administrador/administradorVista.js" },
     invitadoVista:       { view: "paginas/invitadoVista.php",       script: null },
     profesorVista:       { view: "paginas/profesorVista.php",       script: null },
