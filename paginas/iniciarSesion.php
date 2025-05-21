@@ -63,7 +63,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
         <p>¡Bienvenido/a de nuevo! Ya puedes continuar navegando.</p>
       </div>
       <div class="modal-footer justify-content-center border-0">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Continuar!</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Continuar</button>
       </div>
     </div>
   </div>
