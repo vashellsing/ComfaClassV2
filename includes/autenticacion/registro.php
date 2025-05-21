@@ -76,6 +76,7 @@ if ($stmt->execute()) {
     echo json_encode([
         "success"  => true,
         "message"  => "Registro exitoso. Por favor, inicia sesión.",
+        
         // ruta SPA a la que navegaremos con window.navegarA()
         "redirect" => "iniciarSesion"
     ]);
