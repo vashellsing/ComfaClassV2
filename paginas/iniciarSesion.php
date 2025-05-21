@@ -29,7 +29,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
           </form>
 
           <div class="mt-3 text-center">
-            <a href="#" onclick="navegarA('recuperarContrasena')">¿Olvidaste tu contraseña?</a>
+            <a href="#" onclick="event.preventDefault(); navegarA('recuperarContrasena');">¿Olvidaste tu contraseña?</a>
           </div>
           <div class="text-center mt-2">
 

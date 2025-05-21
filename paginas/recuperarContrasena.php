@@ -30,7 +30,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
                 <small id="mensajeExito" class="form-text text-success" style="display:none;"></small>
               </div>
               <!-- Botón -->
-              <button type="submit" class="btn btn-primary w-100">Enviar Instrucciones</button>
+              <button type="submit" class="btn btn-primary w-100">Enviar Codigo</button>
             </form>
   
             <div class="mt-3 text-center">

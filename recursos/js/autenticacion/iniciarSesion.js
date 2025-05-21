@@ -18,7 +18,6 @@
     if (!/@(gmail\.com|hotmail\.com)$/i.test(email)) {
       return showError("Solo se aceptan correos @gmail.com o @hotmail.com.");
     }
-    
 
     try {
       const res = await fetch("includes/autenticacion/iniciarSesion.php", {
