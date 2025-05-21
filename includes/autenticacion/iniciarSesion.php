@@ -39,7 +39,7 @@ if ($user = $result->fetch_assoc()) {
         $_SESSION['correo_usuario']  = $email;
         $_SESSION['id_rol']          = $user['id_rol'];
         $_SESSION['nombre_usuario']  = $user['nombre_usuario'];
-        $_SESSION['apellido_usuario']= $user['apellido_usuario'];
+        $_SESSION['apellido_usuario'] = $user['apellido_usuario'];
 
         // Mapeo de roles a vistas
         $rolesMap = [
@@ -56,9 +56,10 @@ if ($user = $result->fetch_assoc()) {
             "redirect" => $redirect
         ]);
     } else {
+        // Usuario existe pero contraseña NO coincide
         echo json_encode([
             "success" => false,
-            "message" => "Credenciales inválidas."
+            "message" => "Correo o contraseña inválidos."
         ]);
     }
 } else {
