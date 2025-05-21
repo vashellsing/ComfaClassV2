@@ -9,9 +9,28 @@
     const emailInput = document.getElementById("email");
     const mensajeError = document.getElementById("mensajeError");
     const mensajeExito = document.getElementById("mensajeExito");
+
+    const mostrarMensaje = (tipo, mensaje) => {
+      mensajeError.style.display = "none";
+      mensajeExito.style.display = "none";
+
+      const objetivo = tipo === "exito" ? mensajeExito : mensajeError;
+
+      objetivo.textContent = mensaje;
+      objetivo.style.display = "block";
+
+      // Ocultar automáticamente después de 5 segundos
+      setTimeout(() => {
+        objetivo.style.display = "none";
+      }, 5000);
+    };
   
     formRecuperar.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      // Ocultar ambos mensajes al inicio de cada envío
+      mensajeError.style.display = "none";
+      mensajeExito.style.display = "none";
   
       const email = emailInput.value.trim();
   
@@ -33,7 +52,7 @@
       mensajeError.style.display = "none";
   
       // Enviar la solicitud de recuperación al backend
-      fetch("./includes/recuperarContrasena.php", {
+      fetch("./includes/autenticacion/recuperarContrasena.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
