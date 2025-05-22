@@ -2,26 +2,34 @@
 require_once __DIR__ . "/../includes/checkSAP.php";
 ?>
 <!-- paginas/profesorVerCursos.php -->
-<div class="container mt-4">
+<div class="container mt-5">
   <div class="row">
     <!-- Lista de cursos -->
-    <div class="col-md-4 mb-3">
-      <h4>Tus cursos</h4>
-      <ul class="list-group" id="listacursos">
-        <!-- Items se agregarán dinámicamente -->
-      </ul>
+    <div class="col-md-4 mb-4">
+      <div class="card border-primary shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Tus cursos</h5>
+        </div>
+        <ul class="list-group list-group-flush" id="listacursos">
+          <!-- Items se agregarán dinámicamente -->
+        </ul>
+      </div>
     </div>
 
     <!-- Detalles / edición -->
-    <div class="col-md-8" id="curso-detalle">
-      <div class="alert alert-info">Selecciona un curso para ver detalles.</div>
+    <div class="col-md-8">
+      <div class="card border-primary shadow-sm" id="curso-detalle">
+        <div class="card-body">
+          <div class="alert alert-info border border-primary mb-0">
+            Selecciona un curso para ver detalles.
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ... tu código existente ... -->
-
-<!-- Modal para lista de alumnos -->
+<!-- Lista de alumnos -->
 <div 
   class="modal fade" 
   id="modal-alumnos" 
@@ -30,13 +38,13 @@ require_once __DIR__ . "/../includes/checkSAP.php";
   aria-hidden="true"
 >
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content border-primary shadow">
+      <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="modalAlumnosLabel">Alumnos inscritos</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <ul class="list-group" id="lista-alumnos">
+        <ul class="list-group border border-primary" id="lista-alumnos">
           <!-- Se llenará dinámicamente -->
         </ul>
       </div>
@@ -52,4 +60,3 @@ require_once __DIR__ . "/../includes/checkSAP.php";
     </div>
   </div>
 </div>
-

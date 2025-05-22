@@ -13,8 +13,10 @@ if (!isset($_SESSION['id_rol']) || $_SESSION['id_rol'] != 2) {
     exit;
 }
 
+// Obtener el ID del profesor desde la sesión
 $idProfesor = $_SESSION['id_usuario'];
 
+//consulta SQL para obtener los cursos del profesor
 $sql = "
   SELECT 
     c.id_curso,
@@ -28,11 +30,13 @@ $sql = "
   ORDER BY c.fechacreacion_curso DESC
 ";
 
+// Prepara la consulta SQL y se ejecuta
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $idProfesor);
 $stmt->execute();
 $res = $stmt->get_result();
 
+// Verifica si se obtuvieron resultados
 $cursos = [];
 while ($fila = $res->fetch_assoc()) {
     $cursos[] = $fila;

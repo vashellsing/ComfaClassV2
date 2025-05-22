@@ -6,12 +6,13 @@ session_start();
 include_once __DIR__ . "/../conexion.php";
 header('Content-Type: application/json');
 
+// Verificar que el usuario logueado es profesor (rol 2)
 if (!isset($_SESSION['id_rol']) || $_SESSION['id_rol'] != 2) {
     http_response_code(403);
     echo json_encode(['success'=>false,'data'=>[],'message'=>'Acceso denegado.']);
     exit;
 }
-
+// Obtener el ID del profesor y el ID del curso desde la sesión
 $idProfesor = (int) $_SESSION['id_usuario'];
 $cursoId     = (int) ($_GET['curso_id'] ?? 0);
 
@@ -47,6 +48,7 @@ $sql = "
   JOIN inscripciones i      ON u.id_usuario = i.id_usuario
   WHERE i.id_curso = ?
 ";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $cursoId);
 $stmt->execute();

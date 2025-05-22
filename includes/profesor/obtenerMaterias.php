@@ -8,6 +8,7 @@ if ($carrId <= 0) {
     exit;
 }
 
+// Se prepara una consulta SQL para obtener las materias asociadas a una carrera específica
 try {
     $stmt = $conn->prepare("
       SELECT id_materia, nombre_materia
