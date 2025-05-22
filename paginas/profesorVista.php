@@ -20,7 +20,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
         </button>
 
 <!-- Boton de ver alumnos -->
- 
+
         <button type="button" class="btn btn-secondary btn-lg px-4 d-flex align-items-center" onclick="navegarA('profesorCrearCursos')">
           <i class="bi bi-plus-circle me-2"></i> Crear Curso
         </button>
