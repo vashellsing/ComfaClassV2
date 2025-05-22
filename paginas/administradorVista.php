@@ -1,60 +1,42 @@
 <?php
 require_once __DIR__ . "/../includes/checkSAP.php";
 ?>
+<!-- Vista principal del administrador -->
 
-<div class="container mt-4">
-  <h2 class="mb-4">Administrar usuarios</h2>
-  <table class="table table-striper table-hover ">
-    <thead>
-      <tr>
-        <th class="text-center ">Nombre</th>
-        <th class="text-center">Apellido</th>
-        <th class="text-center">Identificación</th>
-        <th class="text-center">Correo</th>
-        <th class="text-center">Rol actual</th>
-        <th class="text-center">Nuevo rol</th>
-        <th class="text-center"></th>
-      </tr>
-    </thead>
-    <tbody id="cuerpo-tabla-usuarios">
-      <!-- Se llenará vía JS -->
-    </tbody>
-  </table>
-</div>
+<div class="container my-5">
 
-<!-- Modal de confirmación -->
-<div 
-  class="modal fade" 
-  id="modal-confirmar-cambio" 
-  tabindex="-1" 
-  aria-labelledby="modalLabel" 
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel">Confirmar cambio de rol</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="bg-light rounded shadow-sm text-center">
+    <!-- Padding responsivo: menos en móvil, más en escritorio -->
+    <div class="py-4 py-md-5 px-3 px-md-5">
+      <h1 class="display-5 display-md-4 text-info mb-3">
+        Panel de Control - Administrador
+      </h1>
+      <p class="lead text-muted mb-4">
+        ¡Bienvenido de nuevo!<br>
+        Desde aquí puedes gestionar usuarios.
+      </p>
+
+      <div class="row justify-content-center">
+        <!-- Columna responsiva para la tarjeta -->
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto">
+          <div class="card h-100 border-success">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="card-title text-success">Gestionar Usuarios</h5>
+                <p class="card-text text-secondary">
+                  Revisa, desbloquea o asigna roles a los usuarios registrados.
+                </p>
+              </div>
+              <button type="button" class="btn btn-success mt-3" onclick="navegarA('adminroles')">
+                Ir a Usuarios
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <p id="mensaje-confirmacion"></p>
-      </div>
-      <div class="modal-footer">
-        <button 
-          type="button" 
-          class="btn btn-secondary" 
-          data-bs-dismiss="modal"
-        >
-          Cancelar
-        </button>
-        <button 
-          type="button" 
-          class="btn btn-primary" 
-          id="boton-confirmar-cambio"
-        >
-          Confirmar
-        </button>
-      </div>
+
+      <hr class="my-5">
     </div>
   </div>
+
 </div>

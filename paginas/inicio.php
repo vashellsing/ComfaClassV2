@@ -9,6 +9,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
       calificaciones, comentarios y mucho más.
     </p>
   </div>
+  <!-- Card de registro -->
   <div class="row justify-content-center g-4">
     <div class="col-sm-6 col-lg-3">
       <div class="card h-100 shadow-sm">
@@ -27,6 +28,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
         </div>
       </div>
     </div>
+    <!-- Card de inicio de sesión  -->
     <div class="col-sm-6 col-lg-3">
       <div class="card h-100 shadow-sm">
         <div class="card-body d-flex flex-column">

@@ -1,23 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ─── 1. MAPA DE RUTAS ─────────────────────────────────────────────────────────
+  // ───  MAPA DE RUTAS ─────────────────────────────────────────────────────────
   const rutas = {
-    inicio:              { view: "paginas/inicio.php",              script: null },
-    iniciarSesion:       { view: "paginas/iniciarSesion.php",       script: "autenticacion/iniciarSesion.js" },
-    registro:            { view: "paginas/registro.php",            script: "autenticacion/registro.js" },
-    recuperarContrasena: { view: "paginas/recuperarContrasena.php", script: "autenticacion/recuperarContrasena.js" },
-    administradorVista:  { view: "paginas/administradorVista.php",  script: "administrador/administradorVista.js" },
-    invitadoVista:       { view: "paginas/invitadoVista.php",       script: null },
-    profesorVista:       { view: "paginas/profesorVista.php",       script: null },
-    profesorCrearCursos: { view: "paginas/profesorCrearCursos.php", script: "profesor/profesorCrearCursos.js" },
-    profesorVerCursos:   { view: "paginas/profesorVerCursos.php",   script: "profesor/profesorVerCursos.js" },
-    estudianteVista:     { view: "paginas/estudianteVista.php",     script: "estudiante/estudianteVista.js" },
-    cursosDisponibles:   { view: "paginas/cursosDisponibles.php",   script: "estudiante/cursosDisponibles.js" },
-    cursosInscritos:     { view: "paginas/cursosInscritos.php",     script: "estudiante/cursosInscritos.js" },
+    // Autenticación
+    inicio:                     { view: "paginas/inicio.php",                     script: null },
+    iniciarSesion:              { view: "paginas/iniciarSesion.php",              script: "autenticacion/iniciarSesion.js" },
+    registro:                   { view: "paginas/registro.php",                   script: "autenticacion/registro.js" },
+    recuperarContrasena:        { view: "paginas/recuperarContrasena.php",        script: "autenticacion/recuperarContrasena.js" },
+    //vista administrador
+    administradorVista:         { view: "paginas/administradorVista.php",         script: null },
+    adminroles:{ view:"paginas/administradorGestionarRoles.php", script:"administrador/administradorVista.js"},
+    // vista invitado
+    invitadoVista:              { view: "paginas/invitadoVista.php",              script: null },
+    //vista profesor
+    profesorVista:              { view: "paginas/profesorVista.php",              script: null },
+    profesorCrearCursos:        { view: "paginas/profesorCrearCursos.php",        script: "profesor/profesorCrearCursos.js" },
+    profesorVerCursos:          { view: "paginas/profesorVerCursos.php",          script: "profesor/profesorVerCursos.js" },
+    // vista estudiante
+    estudianteVista:            { view: "paginas/estudianteVista.php",            script: "estudiante/estudianteVista.js" },
+    cursosDisponibles:          { view: "paginas/cursosDisponibles.php",          script: "estudiante/cursosDisponibles.js" },
+    cursosInscritos:            { view: "paginas/cursosInscritos.php",            script: "estudiante/cursosInscritos.js" },
 
   };
 
-  // ─── 2. RUTAS PÚBLICAS ────────────────────────────────────────────────────────
+  // ───  RUTAS PÚBLICAS ────────────────────────────────────────────────────────
   // Sólo accesibles sin sesión: si hay sesión activa, redirigen al dashboard.
   const rutasPublicas = new Set([
     "inicio",
@@ -25,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "registro"
   ]);
 
-  // ─── 3. CARGADORES DE COMPONENTES ────────────────────────────────────────────
+  // ───  CARGADORES DE COMPONENTES ────────────────────────────────────────────
   function cargarComponente(id, url, callback) {
     fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
       .then(res => {
@@ -46,14 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (prev) prev.remove();
     const s = document.createElement("script");
     s.src = fullPath;
-    s.id  = "ScriptDinamico";
+    s.id = "ScriptDinamico";
     document.body.appendChild(s);
   }
 
-  // ─── 4. NAVEGACIÓN INTERNA (AJAX) ────────────────────────────────────────────
+  // ───  NAVEGACIÓN INTERNA  ────────────────────────────────────────────
   async function _navegarA(pagina, push = true) {
     const ruta = rutas[pagina] || rutas["inicio"];
-    const res  = await fetch(ruta.view, {
+    const res = await fetch(ruta.view, {
       headers: { "X-Requested-With": "XMLHttpRequest" }
     });
     if (!res.ok) throw new Error(res.status);
@@ -67,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Si es pública y hay sesión, redirigimos al dashboard
     if (rutasPublicas.has(pagina)) {
       try {
-        const res  = await fetch("includes/autenticacion/estadoSesion.php");
+        const res = await fetch("includes/autenticacion/estadoSesion.php");
         const sess = await res.json();
         if (sess.loggedIn) {
           return _navegarA(sess.redirect, push);
@@ -79,8 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return _navegarA(pagina, push);
   }
 
-  // ─── 5. GLOBALES Y LISTENERS ──────────────────────────────────────────────────
-  window.navegarA     = navegarA;
+  // ─── GLOBALES Y LISTENERS ──────────────────────────────────────────────────
+  window.navegarA = navegarA;
   window.cargarHeader = () => cargarComponente("header", "componentes/header.php", () => {
     cargarScript("componentes/header.js");
   });
@@ -91,8 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
     await navegarA(pag, false);
   });
 
-  // ─── 6. ARRANQUE DE LA APP ────────────────────────────────────────────────────
-  // 6.1. Header y Footer fijos
+  // ───  ARRANQUE DE LA APP ────────────────────────────────────────────────────
+  //  Header y Footer fijos
   cargarComponente("header", "componentes/header.php", () => {
     cargarScript("componentes/header.js");
   });
@@ -104,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!inicial) {
       try {
-        const res  = await fetch("includes/autenticacion/estadoSesion.php");
+        const res = await fetch("includes/autenticacion/estadoSesion.php");
         const sess = await res.json();
         inicial = sess.loggedIn ? sess.redirect : "inicio";
       } catch (_) {

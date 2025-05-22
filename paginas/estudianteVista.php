@@ -45,5 +45,3 @@ require_once __DIR__ . "/../includes/checkSAP.php";
   </div>
 </main>
 
-<!-- Asegúrate de incluir Bootstrap Icons si no lo has hecho ya -->
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> -->
