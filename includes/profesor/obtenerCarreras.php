@@ -2,12 +2,14 @@
 header('Content-Type: application/json');
 include_once __DIR__ . "/../conexion.php";
 
+//
 $facuId = intval($_GET['facultad_id'] ?? 0);
 if ($facuId <= 0) {
     echo json_encode(["success"=>false,"data"=>[],"message"=>"Facultad inválida."]);
     exit;
 }
 
+// Se prepara una consulta SQL para obtener las carreras asociadas a la facultad indicada
 try {
     $stmt = $conn->prepare("
       SELECT id_carrera, nombre_carrera

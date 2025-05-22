@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombreCurso = $_POST['nombre_curso'];
     $descripcionCurso = $_POST['descripcion_curso'];
 
-    // Aquí deberías realizar la validación de los datos recibidos
+    // Aquí se realizar la validación de los datos recibidos
 
     $sql = "UPDATE cursos SET nombre_curso = ?, descripcion_curso = ? WHERE id_curso = ?";
     $stmt = $conn->prepare($sql);

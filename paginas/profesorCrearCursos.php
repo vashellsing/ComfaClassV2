@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../includes/checkSAP.php";
 ?>
+<!-- Formulario para crear cursos -->
 <div class="container mt-4">
   <h2>Crear nuevo curso</h2>
   <form id="formcursos" novalidate>
@@ -11,7 +12,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
         type="text"
         id="nombreCurso"
         name="nombreCurso"
-        class="form-control"
+        class="form-control border border-primary"
         maxlength="60"
         required
       />
@@ -21,7 +22,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
     <!-- Facultad -->
     <div class="mb-3">
       <label for="facultad" class="form-label">Facultad</label>
-      <select id="facultad" name="facultad" class="form-select" required>
+      <select id="facultad" name="facultad" class="form-select border border-primary" required>
         <option value="">Seleccione una facultad</option>
       </select>
       <div class="invalid-feedback"></div>
@@ -30,7 +31,7 @@ require_once __DIR__ . "/../includes/checkSAP.php";
     <!-- Carrera -->
     <div class="mb-3">
       <label for="carrera" class="form-label">Carrera</label>
-      <select id="carrera" name="carrera" class="form-select" required>
+      <select id="carrera" name="carrera" class="form-select border border-primary" required>
         <option value="">Seleccione una carrera</option>
       </select>
       <div class="invalid-feedback"></div>
@@ -39,13 +40,11 @@ require_once __DIR__ . "/../includes/checkSAP.php";
     <!-- Materia -->
     <div class="mb-3">
       <label for="materia" class="form-label">Materia</label>
-      <select id="materia" name="materia" class="form-select" required>
+      <select id="materia" name="materia" class="form-select border border-primary" required>
         <option value="">Seleccione una materia</option>
       </select>
       <div class="invalid-feedback"></div>
     </div>
-
-  
 
     <!-- Descripción -->
     <div class="mb-3">
@@ -53,15 +52,14 @@ require_once __DIR__ . "/../includes/checkSAP.php";
       <textarea
         id="descripcion"
         name="descripcion"
-        class="form-control"
+        class="form-control border border-primary"
         maxlength="250"
       ></textarea>
       <div class="invalid-feedback"></div>
     </div>
 
+    <!-- Botones -->
     <button type="submit" class="btn btn-primary">Crear Curso</button>
-    <button type="button" class="btn btn-secondary ms-2" id="cancelarCurso">
-      Limpiar
-    </button>
+    <button type="button" class="btn btn-secondary ms-2" id="cancelarCurso">Limpiar</button>
   </form>
 </div>
