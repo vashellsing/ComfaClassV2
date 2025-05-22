@@ -1,6 +1,4 @@
-<?php
-require_once __DIR__ . "/../includes/checkSAP.php";
-?>
+<?php require_once __DIR__ . "/../includes/checkSAP.php"; ?>
 <!-- Formulario para crear cursos -->
 <div class="container mt-4">
   <h2>Crear nuevo curso</h2>
@@ -63,3 +61,26 @@ require_once __DIR__ . "/../includes/checkSAP.php";
     <button type="button" class="btn btn-secondary ms-2" id="cancelarCurso">Limpiar</button>
   </form>
 </div>
+
+<!-- Modal genérico para mensajes -->
+<div class="modal fade" id="modal-mensaje" tabindex="-1" aria-labelledby="modalMsgLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-primary">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalMsgLabel">Notificación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center" id="modal-mensaje-body">
+        <!-- Se inyecta el texto -->
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Asegúrate de cargar Bootstrap JS aquí -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Luego tu JS -->
+<script src="js/profesorCrearCursos.js"></script>
