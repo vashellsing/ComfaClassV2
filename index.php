@@ -12,23 +12,23 @@ session_start(); // Si luego necesitas gestionar sesiones en tu app
 </head>
 <body>
 
-  <!-- Header dinámico -->
+  <!-- Header -->
 
   <header id="header"></header>
 
   <div class="container mt-5">
     <div class="row">
       <!-- Main donde se inyectan las vistas -->
-      <main class="col-12 col-md-8 mx-auto px-3" id="main">
-        <!-- Se cargará home.php o la vista actual -->
+      <main class="col-12 px-0" id="main">
+        
       </main>
     </div>
   </div>
 
-  <!-- Footer dinámico -->
+  <!-- Footer  -->
   <footer id="footer"></footer>
 
-  <!-- Librería de Bootstrap -->
+  <!--Bootstrap -->
   <script src="recursos/js/bootstrap.bundle.min.js"></script>
   <!-- enrutamiento SPA -->
   <script src="recursos/js/main.js"></script>
